@@ -1,0 +1,1 @@
+Prioridade: 10; Categoria: Hen; Estado: 2; Descricao: futePrioridade: 5; Categoria: Hen; Estado: 3; Descricao: fisica

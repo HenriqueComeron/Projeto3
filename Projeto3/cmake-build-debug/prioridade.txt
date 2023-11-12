@@ -1,0 +1,1 @@
+Prioridade: 5; Categoria: Hen; Estado: 3; Descricao: fisica

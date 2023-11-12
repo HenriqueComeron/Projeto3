@@ -9,6 +9,11 @@ int criarTarefa(ListaDeTarefas *lt){
     // Abrindo o arquivo
     FILE *f = fopen("arquivo.bin", "ab");
 
+    if (f == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return 1;
+    }
+
     // Transformando Struct em local
     Tarefa novatarefa;
 
@@ -21,10 +26,10 @@ int criarTarefa(ListaDeTarefas *lt){
 
     // Pedindo informações basicas
     printf("De uma Categoria a sua tarefa: \n");
-    scanf("%d",&novatarefa.categoria);
+    scanf("%s",&novatarefa.categoria);
 
     printf("Descreva sua tarefa: \n");
-    scanf("%d",&novatarefa.descricao);
+    scanf("%s",&novatarefa.descricao);
 
     printf("Qual a prioridade (de 0 a 10): \n");
     scanf("%d",&novatarefa.prioridade);
@@ -58,7 +63,9 @@ int deletarTarefa(ListaDeTarefas *lt){
         }
         lt->qtd--;
         printf("Tarefa excluida com sucesso\n");
-
+    if (resposta == 221){
+        lt->qtd = 0;
+    }
     } else {
         printf("Numero de tarefa invalido\n");
     }
@@ -89,8 +96,8 @@ int listarTarefas(ListaDeTarefas lt) {
         while (i < lt.qtd) {
             if (lt.tarefas[i].prioridade == prioridadeescolhida) {
                 printf("Numero da Tarefa: %d\n", i);
-                printf("Categoria: %s", lt.tarefas[i].categoria);
-                printf("Descricao: %s", lt.tarefas[i].descricao);
+                printf("Categoria: %s\n", lt.tarefas[i].categoria);
+                printf("Descricao: %s\n", lt.tarefas[i].descricao);
                 printf("Prioridade: %d\n", lt.tarefas[i].prioridade);
                 printf("Estado: %d\n", lt.tarefas[i].estado);
 
@@ -104,8 +111,8 @@ int listarTarefas(ListaDeTarefas lt) {
         while (i < lt.qtd) {
             if (lt.tarefas[i].estado == estadoescolhido) {
                 printf("Numero da Tarefa: %d\n", i);
-                printf("Categoria: %s", lt.tarefas[i].categoria);
-                printf("Descricao: %s", lt.tarefas[i].descricao);
+                printf("Categoria: %s\n", lt.tarefas[i].categoria);
+                printf("Descricao: %s\n", lt.tarefas[i].descricao);
                 printf("Prioridade: %d\n", lt.tarefas[i].prioridade);
                 printf("Estado: %d\n", lt.tarefas[i].estado);
             }
@@ -114,13 +121,12 @@ int listarTarefas(ListaDeTarefas lt) {
     }
     if (escolha == 3) {
         printf("Digite a categoria que deve ser listada: ");
-
-        scanf("%d", &categoriaescolhida);
+        scanf("%s", categoriaescolhida);
         while (i < lt.qtd) {
             if (strcmp(lt.tarefas[i].categoria, categoriaescolhida) == 0) {
                 printf("Numero da Tarefa: %d\n", i);
-                printf("Categoria: %s", lt.tarefas[i].categoria);
-                printf("Descricao: %s", lt.tarefas[i].descricao);
+                printf("Categoria: %s\n", lt.tarefas[i].categoria);
+                printf("Descricao: %s\n", lt.tarefas[i].descricao);
                 printf("Prioridade: %d\n", lt.tarefas[i].prioridade);
                 printf("Estado: %d\n", lt.tarefas[i].estado);
             }
@@ -130,15 +136,15 @@ int listarTarefas(ListaDeTarefas lt) {
     if (escolha == 4) {
         printf("Digite a categoria e prioridade que devem ser listados: ");
         printf("Categoria: \n");
-        scanf("%s", &categoriaescolhida);
+        scanf("%s", categoriaescolhida);
         printf("Prioridade: \n");
         scanf("%d", &prioridadeescolhida);
         while (i < lt.qtd) {
             if (strcmp(lt.tarefas[i].categoria, categoriaescolhida) == 0 &&
                 lt.tarefas[i].prioridade == prioridadeescolhida) {
                 printf("Numero da Tarefa: %d\n", i);
-                printf("Categoria: %s", lt.tarefas[i].categoria);
-                printf("Descricao: %s", lt.tarefas[i].descricao);
+                printf("Categoria: %s\n", lt.tarefas[i].categoria);
+                printf("Descricao: %s\n", lt.tarefas[i].descricao);
                 printf("Prioridade: %d\n", lt.tarefas[i].prioridade);
                 printf("Estado: %d\n", lt.tarefas[i].estado);
             }
@@ -148,8 +154,8 @@ int listarTarefas(ListaDeTarefas lt) {
     if (escolha == 5) {
         while (i < lt.qtd) {
             printf("Numero da Tarefa: %d\n", i);
-            printf("Categoria: %s", lt.tarefas[i].categoria);
-            printf("Descricao: %s", lt.tarefas[i].descricao);
+            printf("Categoria: %s\n", lt.tarefas[i].categoria);
+            printf("Descricao: %s\n", lt.tarefas[i].descricao);
             printf("Prioridade: %d\n", lt.tarefas[i].prioridade);
             printf("Estado: %d\n", lt.tarefas[i].estado);
 
@@ -197,9 +203,8 @@ int alterarTarefa(ListaDeTarefas *lt){
                 }
 
             }
-            if (escolha == 3) {
+            if (escolha == 4) {
                 int novoandamento;
-
                 printf("Digite o novo andamento (1: completa, 2: em andamento, 3: nao iniciada): ");
                 if (scanf("%d", &novoandamento) == 1 &&
                     (novoandamento == 1 || novoandamento == 2 || novoandamento == 3)) {
@@ -230,18 +235,15 @@ int salvarLista(ListaDeTarefas lt, char nome[]) {
 
     // Abrindo o arquivo como write
     FILE *f = fopen("arquivo.bin", "wb");
-    //
 
     if (f == NULL) {
         return 1;
     }
     // Escrevendo a lista atualizada no arquivo
     fwrite(&lt, sizeof(ListaDeTarefas), 1, f);
-    //
 
     // Fechando o arquivo
     fclose(f);
-    //
 
     // Indicação de Sucesso
     return 0;
@@ -252,19 +254,110 @@ int carregarLista(ListaDeTarefas *lt, char nome[]) {
 
     // Abrindo o arquivo como read
     FILE *f = fopen("arquivo.bin", "rb");
-    //
 
     if (f == NULL)
         return 1;
 
     //Loop de repetição para leitura de cada Tarefa dentro da ListaDeTarefas no endereço de tarefalida
     fread(lt, sizeof(ListaDeTarefas), 1, f);
-    //
 
     //Fecha o arquivo
     fclose(f);
-    //
 
     // Indicação de Sucesso
     return 0;
+}
+
+int exportarLista(ListaDeTarefas *lt) {
+    int escolha;
+    int prioridade;
+    char categoria[100];
+
+    printf("Como deseja exportar os arquivos: \n");
+    printf("1. Por Prioridade\n");
+    printf("2. Por Categoria\n");
+    printf("3. Por Prioridade e Categoria\n");
+    scanf("%d", &escolha);
+
+    if (escolha == 1) {
+        printf("Digite a Prioridade que deseja: \n");
+        scanf("%d", &prioridade);
+        exportarPrioridade(*lt, prioridade);
+    } if (escolha == 2) {
+        printf("Digite a Categoria que deseja: \n");
+        scanf("%s", categoria);
+        exportarCategoria(*lt, categoria);
+    } if (escolha == 3) {
+        printf("Digite a Prioridade que deseja: \n");
+        scanf("%d", &prioridade);
+        printf("Digite a Categoria que deseja: \n");
+        scanf("%s", categoria);
+        exportarPrioridadeECategoria(*lt, prioridade, categoria);
+    } else {
+        printf("Opcao invalida.\n");
+        return 1;
+    }
+
+    return 0;
+}
+
+
+void exportarPrioridade(ListaDeTarefas lt, int prioridade) {
+    // Abrindo o arquivo para escrita
+    FILE *f = fopen("prioridade.txt", "w");
+
+    if (f == NULL) {
+        printf("Erro ao abrir o arquivo para exportar.\n");
+        return;
+    }
+
+    // Escrevendo as tarefas com a prioridade escolhida no arquivo
+    for (int i = 0; i < lt.qtd; i++) {
+        if (lt.tarefas[i].prioridade == prioridade) {
+            fprintf(f, "Prioridade: %d; Categoria: %s; Estado: %d; Descricao: %s", lt.tarefas[i].prioridade, lt.tarefas[i].categoria, lt.tarefas[i].estado, lt.tarefas[i].descricao);
+        }
+    }
+
+    // Fechando o arquivo
+    fclose(f);
+}
+
+void exportarCategoria(ListaDeTarefas lt, char categoria[]) {
+    // Abrindo o arquivo para escrita
+    FILE *f = fopen("categoria.txt", "w");
+
+    if (f == NULL) {
+        printf("Erro ao abrir o arquivo para exportar.\n");
+        return;
+    }
+
+    // Escrevendo as tarefas com a categoria escolhida no arquivo
+    for (int i = 0; i < lt.qtd; i++) {
+        if (strcmp(lt.tarefas[i].categoria, categoria) == 0) {
+            fprintf(f, "Prioridade: %d; Categoria: %s; Estado: %d; Descricao: %s", lt.tarefas[i].prioridade, lt.tarefas[i].categoria, lt.tarefas[i].estado, lt.tarefas[i].descricao);
+        }
+    }
+
+    // Fechando o arquivo
+    fclose(f);
+}
+
+void exportarPrioridadeECategoria(ListaDeTarefas lt, int prioridade, char categoria[]) {
+    // Abrindo o arquivo para escrita
+    FILE *f = fopen("prioridade_categoria.txt", "w");
+
+    if (f == NULL) {
+        printf("Erro ao abrir o arquivo para exportar.\n");
+        return;
+    }
+
+    // Escrevendo as tarefas com a prioridade e categoria escolhidas no arquivo
+    for (int i = 0; i < lt.qtd; i++) {
+        if (lt.tarefas[i].prioridade == prioridade && strcmp(lt.tarefas[i].categoria, categoria) == 0) {
+            fprintf(f, "Prioridade: %d; Categoria: %s; Estado: %d; Descricao: %s", lt.tarefas[i].prioridade, lt.tarefas[i].categoria, lt.tarefas[i].estado, lt.tarefas[i].descricao);
+        }
+    }
+
+    // Fechando o arquivo
+    fclose(f);
 }

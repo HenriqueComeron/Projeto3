@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "proj.h"
 
-
 int main() {
     int cod;
     char arquivo[] = "tarefas";
@@ -28,6 +27,9 @@ int main() {
         }
         else if(opcao ==4){
             alterarTarefa(&lt);
+        }
+        else if(opcao ==5){
+            exportarLista(&lt);
         }
         else{
             printf("Opcao nao existe\n");
